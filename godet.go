@@ -776,7 +776,7 @@ func (remote *RemoteDebugger) CaptureScreenshot(format string, quality int, capt
 	res, err := remote.SendRequest("Page.captureScreenshot", Params{
 		"format":      format,
 		"quality":     quality,
-		"captureBeyondViewport": captureBeyondViewport
+		"captureBeyondViewport": captureBeyondViewport,
 		"fromSurface": fromSurface,
 	})
 
