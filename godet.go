@@ -768,7 +768,7 @@ func (remote *RemoteDebugger) ProcessNavigation(navigationID int, navigation Nav
 }
 
 // CaptureScreenshot takes a screenshot, uses "png" as default format.
-func (remote *RemoteDebugger) CaptureScreenshot(format string, quality int, fromSurface bool) ([]byte, error) {
+func (remote *RemoteDebugger) CaptureScreenshot(format string, quality int, captureBeyondViewport bool, fromSurface bool) ([]byte, error) {
 	if format == "" {
 		format = "png"
 	}
@@ -776,6 +776,7 @@ func (remote *RemoteDebugger) CaptureScreenshot(format string, quality int, from
 	res, err := remote.SendRequest("Page.captureScreenshot", Params{
 		"format":      format,
 		"quality":     quality,
+		"captureBeyondViewport": captureBeyondViewport
 		"fromSurface": fromSurface,
 	})
 
@@ -791,7 +792,7 @@ func (remote *RemoteDebugger) CaptureScreenshot(format string, quality int, from
 }
 
 // SaveScreenshot takes a screenshot and saves it to a file.
-func (remote *RemoteDebugger) SaveScreenshot(filename string, perm os.FileMode, quality int, fromSurface bool) error {
+func (remote *RemoteDebugger) SaveScreenshot(filename string, perm os.FileMode, quality int, captureBeyondViewport bool, fromSurface bool) error {
 	var format string
 	ext := filepath.Ext(filename)
 	switch ext {
@@ -802,7 +803,7 @@ func (remote *RemoteDebugger) SaveScreenshot(filename string, perm os.FileMode, 
 	default:
 		return errors.New("Image format not supported")
 	}
-	rawScreenshot, err := remote.CaptureScreenshot(format, quality, fromSurface)
+	rawScreenshot, err := remote.CaptureScreenshot(format, quality, captureBeyondViewport, fromSurface)
 	if err != nil {
 		return err
 	}
